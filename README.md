@@ -8,14 +8,6 @@
    - Refactored the UI to align with the new backend API structure and endpoints.
    - Updated API service calls to support MongoDB-based backend changes.
 
-3. **State Management**:
-   - Improved state management to ensure seamless communication between the frontend and backend.
-   - Optimized Vuex store modules for better maintainability and performance.
-
-4. **UI Enhancements**:
-   - Enhanced the user interface for better responsiveness and user experience.
-   - Fixed layout issues and improved component reusability.
-
 ## Development Instructions
 1. **Setup**:
    - Navigate to the `ui` folder in the project directory.
