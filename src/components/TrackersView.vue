@@ -4,17 +4,17 @@
       
       <template v-if="column.key === 'lastDateTime'">
         <span>
-         {{moment(record.lastDateTime)}}
+         {{record.histories.length ==0 ? 'Not Listed':moment(record.histories[0].createDateTime)}}
         </span>
       </template>
         <template v-if="column.key === 'lastRank'">
         <span>
-         {{record.lastRank ? record.lastRank:'Not Listed'}}
+         {{record.histories.length ===0 ? 'Not Listed':record.histories[0].ranks[0]}}
         </span>
       </template>
       <template v-else-if="column.key === 'action'">
         <span>
-           <router-link :to="'/history?id='+record.id" >History</router-link>
+           <router-link :to="'/history?key='+record.key" >History</router-link>
         </span>
       </template>
     </template>
@@ -22,7 +22,7 @@
 </template>
 <script>
 import moment from "moment";
-import { GetAllTrackers } from '../Stores/TrackerApi';
+import TrackerService from '../Stores/TrackerApi';
 
 export default {
  props: {
@@ -40,10 +40,11 @@ export default {
             dataIndex: 'url',
             key: 'url',
             }, {
-            title: 'Last Ranks',
+            title: 'Best Latest Rank',
             dataIndex: 'lastRank',
             key: 'lastRank',
-            }, {
+            }, 
+            {
             title: 'Last DateTime',
             key: 'lastDateTime',
             dataIndex: 'lastDateTime',
@@ -61,8 +62,8 @@ export default {
     return moment(date).format('DD/MM/YYYY h:mm:ss');
   },
  async fetchTracker(){
-    var response =await GetAllTrackers();
-   this.trackers=response.data;
+    var response =await TrackerService.GetAllTrackers({});
+   this.trackers=response.items;
   }
 }
 }

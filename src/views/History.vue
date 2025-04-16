@@ -24,12 +24,12 @@
       
       <template v-if="column.key === 'insertDate'">
         <span>
-          {{moment(record.insertDate)}}
+          {{moment(record.createDateTime)}}
         </span>
       </template>
         <template v-if="column.key === 'ranks'">
         <span>
-          {{record.ranks ? record.ranks:'Not Listed'}}
+          {{record.ranks.length===0 ? 'Not Listed': record.ranks}}
         </span>
       </template>
     </template>
@@ -38,7 +38,7 @@
 </template>
 <script>
 import moment from "moment";
-import { GetTrackerByHistories,GetGoogleRank } from '../Stores/TrackerApi';
+import TrackerService from '../Stores/TrackerApi';
 
 export default {
  props: {
@@ -62,24 +62,21 @@ export default {
     }
   },
   async mounted(){
-    this.id=+this.$route.query.id;
-    await  this.fetchTracker();
+    await  this.fetchTracker(this.$route.query.key);
   },
   methods: {
   moment: function (date) {
     return moment(date).format('DD/MM/YYYY h:mm:ss');
   },
- async fetchTracker(){
-    var response =await GetTrackerByHistories(this.id);
-   this.tracker=response.data;
+ async fetchTracker(key){
+  this.tracker =await TrackerService.GetTrackerByKey(key);
   },
    async submit(){
       this.loading=true;
-      var response= await GetGoogleRank(this.tracker);
-      this.currentTracker=response.data;
+      this.currentTracker.ranks= await TrackerService.GetGoogleRank(this.tracker.search,this.tracker.url);
       this.loading=false;
       this.isFirst=false;
-      await this.fetchTracker();
+      await this.fetchTracker(this.$route.query.key);
     }
 }
 }
