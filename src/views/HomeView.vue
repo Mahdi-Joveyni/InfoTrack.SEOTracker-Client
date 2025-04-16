@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import { GetGoogleRank } from '../Stores/TrackerApi';
+import TrackerService from '../Stores/TrackerApi';
 import TrackersView from '../components/TrackersView.vue';
 export default {
   
@@ -69,8 +69,8 @@ export default {
   methods: {
     async submit(){
       this.loading=true;
-      var response= await GetGoogleRank(this.currentTracker);
-      this.currentTracker.ranks=response.data;
+      var response= await TrackerService.GetGoogleRank(this.currentTracker.search,this.currentTracker.url);
+      this.currentTracker.Ranks=response.data;
       this.isFirst=false;
       this.loading=false;
       await this.$refs.myChild.fetchTracker();
